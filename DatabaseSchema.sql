@@ -1,0 +1,25 @@
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),  
+    Email NVARCHAR(255) NOT NULL UNIQUE,  
+    FirstName NVARCHAR(100) NOT NULL,  
+    LastName NVARCHAR(100) NOT NULL,  
+    PhoneNumber NVARCHAR(20) NULL,  
+    PasswordHash NVARCHAR(255) NOT NULL,  
+    CreatedAt DATETIME DEFAULT GETDATE()  
+);
+
+CREATE TABLE Listings (
+    ListingID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    Name NVARCHAR(255) NOT NULL,
+    Price DECIMAL(18, 2) NOT NULL,
+    City NVARCHAR(100) NOT NULL,
+    HouseNumber INT NOT NULL,
+    RoadNumber INT NOT NULL,
+    BlockNumber INT NOT NULL,
+    Photo VARBINARY(MAX) NULL,
+    Wifi BIT DEFAULT 0,
+    WaterElectricity BIT DEFAULT 0,
+    Views INT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
