@@ -1,0 +1,9 @@
+<div *ngFor="let listing of listings" class="listing">
+    <h3>{{ listing.name }}</h3>
+    <p>Price: {{ listing.price }} BD</p>
+    <p>Location: {{ listing.city }}, House: {{ listing.houseNumber }}, Road: {{ listing.roadNumber }}, Block: {{ listing.blockNumber }}</p>
+    <p>Wi-Fi: {{ listing.wifi ? 'Yes' : 'No' }}</p>
+    <p>Water & Electricity: {{ listing.waterElectricity ? 'Yes' : 'No' }}</p>
+    <p>Views: {{ listing.views }}</p>
+  </div>
+  
