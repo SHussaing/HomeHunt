@@ -1,9 +1,18 @@
-<div *ngFor="let listing of listings" class="listing">
-    <h3>{{ listing.name }}</h3>
-    <p>Price: {{ listing.price }} BD</p>
-    <p>Location: {{ listing.city }}, House: {{ listing.houseNumber }}, Road: {{ listing.roadNumber }}, Block: {{ listing.blockNumber }}</p>
-    <p>Wi-Fi: {{ listing.wifi ? 'Yes' : 'No' }}</p>
-    <p>Water & Electricity: {{ listing.waterElectricity ? 'Yes' : 'No' }}</p>
-    <p>Views: {{ listing.views }}</p>
+<div class="flex flex-wrap justify-content-center">
+  <div *ngFor="let listing of listings" class="p-2 w-full md:w-4">
+      <p-card class="surface-card p-4 shadow-2 border-round w-full">
+          <ng-template pTemplate="header">
+              <img alt="{{ listing.name }}" class="w-full mb-3 border-round">
+          </ng-template>
+          <ng-template pTemplate="content">
+              <h3 class="text-900 text-xl mb-3">{{ listing.name }}</h3>
+              <p class="mb-2"><strong>Price:</strong> {{ listing.price }} BD</p>
+              <p class="mb-2"><strong>Location:</strong> {{ listing.city }}, House: {{ listing.houseNumber }}, Road: {{ listing.roadNumber }}, Block: {{ listing.blockNumber }}</p>
+              <p class="mb-2"><strong>Wi-Fi:</strong> {{ listing.wifi ? 'Yes' : 'No' }}</p>
+              <p class="mb-2"><strong>Water & Electricity:</strong> {{ listing.waterElectricity ? 'Yes' : 'No' }}</p>
+              <p class="mb-4"><strong>Views:</strong> {{ listing.views }}</p>
+              <a class="text-purple-500 font-medium cursor-pointer">See More</a>
+          </ng-template>
+      </p-card>
   </div>
-  
+</div>

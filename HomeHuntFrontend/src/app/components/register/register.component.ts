@@ -5,15 +5,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RippleModule } from 'primeng/ripple';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
-  imports: [
-    InputTextModule,
-    ButtonModule,
-    CheckboxModule,
-    RippleModule
-  ],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  imports: [InputTextModule, ButtonModule, CheckboxModule, RippleModule],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
 })
-export class LoginComponent { }
+export class RegisterComponent {
+
+}
