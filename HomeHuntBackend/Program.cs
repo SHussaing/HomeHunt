@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -14,7 +13,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowCredentials());
 });
-
 
 builder.Services.AddDbContext<HomeHuntDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -34,6 +32,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Apply CORS policy before any other middleware that handles requests
+app.UseCors("AllowAngularApp");
 
 app.UseAuthorization();
 
