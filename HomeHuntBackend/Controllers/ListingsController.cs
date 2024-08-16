@@ -27,77 +27,57 @@ namespace HomeHuntBackend.Controllers
             return await _context.Listings.ToListAsync();
         }
 
-        // GET: api/Listings/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Listing>> GetListing(int id)
+        public class ListingDto
         {
-            var listing = await _context.Listings.FindAsync(id);
-
-            if (listing == null)
-            {
-                return NotFound();
-            }
-
-            return listing;
+            public int? UserId { get; set; }
+            public string Name { get; set; } = null!;
+            public decimal Price { get; set; }
+            public string City { get; set; } = null!;
+            public int HouseNumber { get; set; }
+            public int RoadNumber { get; set; }
+            public int BlockNumber { get; set; }
+            public IFormFile? Photo { get; set; }
+            public bool? Wifi { get; set; }
+            public bool? WaterElectricity { get; set; }
         }
 
-        // PUT: api/Listings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutListing(int id, Listing listing)
-        {
-            if (id != listing.ListingId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(listing).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ListingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Listings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Listing>> PostListing(Listing listing)
+        public async Task<ActionResult<Listing>> PostListing([FromForm] ListingDto listingDto)
         {
+            // Convert DTO to entity
+            var listing = new Listing
+            {
+                UserId = listingDto.UserId,
+                Name = listingDto.Name,
+                Price = listingDto.Price,
+                City = listingDto.City,
+                HouseNumber = listingDto.HouseNumber,
+                RoadNumber = listingDto.RoadNumber,
+                BlockNumber = listingDto.BlockNumber,
+                Photo = listingDto.Photo != null ? ConvertToBytes(listingDto.Photo) : null,
+                Wifi = listingDto.Wifi,
+                WaterElectricity = listingDto.WaterElectricity,
+                Views = 0
+            };
+
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetListing", new { id = listing.ListingId }, listing);
+            return Created("", listing);  // Or just return Ok(listing);
         }
 
-        // DELETE: api/Listings/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteListing(int id)
+        private byte[] ConvertToBytes(IFormFile file)
         {
-            var listing = await _context.Listings.FindAsync(id);
-            if (listing == null)
+            using (var memoryStream = new MemoryStream())
             {
-                return NotFound();
+                file.CopyTo(memoryStream);
+                return memoryStream.ToArray();
             }
-
-            _context.Listings.Remove(listing);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
+
 
         private bool ListingExists(int id)
         {

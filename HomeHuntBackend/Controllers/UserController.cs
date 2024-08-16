@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace HomeHuntBackend.Controllers
 {
@@ -50,10 +50,32 @@ namespace HomeHuntBackend.Controllers
             return Created("", user);
         }
 
+        [HttpPost("authenticate")]
+        public async Task<ActionResult> Authenticate(string email, string password)
+        {
+            // Find the user by email
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "InvalidCredentials" });
+            }
 
+            // Verify the password
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            if (!isPasswordValid)
+            {
+                return Unauthorized(new { message = "InvalidCredentials" });
+            }
 
-
-
+            // Return the userId, firstName, and lastName on successful authentication
+            return Ok(new
+            {
+                message = "AuthenticationSuccessful",
+                userId = user.UserId,
+                firstName = user.FirstName,
+                lastName = user.LastName
+            });
+        }
 
     }
 }

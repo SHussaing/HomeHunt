@@ -1,0 +1,6 @@
+/* Disable all animations */
+* {
+    animation: none !important;
+    transition: none !important;
+  }
+  

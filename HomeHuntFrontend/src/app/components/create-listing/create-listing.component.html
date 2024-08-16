@@ -1,0 +1,57 @@
+<div class="flex justify-content-center align-items-center min-h-screen">
+  <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+    <form [formGroup]="listingForm" (ngSubmit)="onSubmit()">
+      <div class="text-center mb-5">
+        <img src="logo.svg" alt="Image" height="200" class="mb-3">
+        <div class="text-900 text-3xl font-medium mb-3">Create a Listing</div>
+        <span class="text-600 font-medium line-height-3">List your property now.</span>
+      </div>
+      
+      <div>
+        <label for="name" class="block text-900 font-medium mb-2">Name</label>
+        <input id="name" type="text" placeholder="Listing Name" pInputText class="w-full mb-3" formControlName="name">
+
+        <label for="price" class="block text-900 font-medium mb-2">Price</label>
+        <div class="p-inputgroup mb-3">
+          <input id="price" type="number" placeholder="Price" pInputText formControlName="price">
+          <span class="p-inputgroup-addon">BD/Month</span>
+        </div>
+
+        <label for="city" class="block text-900 font-medium mb-2">City</label>
+        <p-dropdown [options]="cities" placeholder="Select a City" formControlName="city" class="w-full mb-3"></p-dropdown>
+
+        <div class="flex gap-3 mb-3">
+          <div class="w-full">
+            <label for="houseNumber" class="block text-900 font-medium mb-2">House Number</label>
+            <input id="houseNumber" type="text" placeholder="House Number" pInputText maxlength="4" class="w-full" formControlName="houseNumber">
+          </div>
+          <div class="w-full">
+            <label for="roadNumber" class="block text-900 font-medium mb-2">Road Number</label>
+            <input id="roadNumber" type="text" placeholder="Road Number" pInputText maxlength="4" class="w-full" formControlName="roadNumber">
+          </div>
+          <div class="w-full">
+            <label for="blockNumber" class="block text-900 font-medium mb-2">Block Number</label>
+            <input id="blockNumber" type="text" placeholder="Block Number" pInputText maxlength="4" class="w-full" formControlName="blockNumber">
+          </div>
+        </div>
+
+        <label for="photo" class="block text-900 font-medium mb-2">Upload Photo</label>
+        <input id="photo" type="file" (change)="onFileChange($event)" class="w-full mb-3" accept="image/*">
+
+        <div class="block text-900 font-medium mb-2">Utilities</div>
+        <div class="flex gap-3 align-items-center mb-3">
+          <div class="flex align-items-center">
+            <p-checkbox binary="true" formControlName="wifi"></p-checkbox>
+            <label for="wifi" class="ml-2">Wi-Fi</label>
+          </div>
+          <div class="flex align-items-center">
+            <p-checkbox binary="true" formControlName="waterElectricity"></p-checkbox>
+            <label for="waterElectricity" class="ml-2">Water & Electricity</label>
+          </div>
+        </div>
+
+        <button pButton pRipple label="Create Listing" icon="pi pi-save" class="w-full" type="submit"></button>
+      </div>
+    </form>
+  </div>
+</div>
