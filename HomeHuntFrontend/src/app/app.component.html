@@ -1,26 +1,32 @@
-<header class="flex justify-content-between align-items-center p-3 shadow-2">
-    <a [routerLink]="''" class="flex align-items-center text-decoration-none">
-        <i class="pi pi-home text-2xl mr-2"></i>Hunt
+<header class="flex justify-content-between align-items-center p-3 shadow-2 surface-0 fixed-header">
+    <!-- Home Link -->
+    <a [routerLink]="''" class="flex align-items-center text-decoration-none text-primary">
+        <i class="pi pi-home text-3xl mr-2"></i>
+        <span class="text-xl font-bold">Hunt</span>
     </a>
 
+    <!-- Navigation Links -->
     <div class="flex align-items-center">
-        <!-- Show "Create Listing" link only when the user is logged in -->
-        <a *ngIf="isLoggedIn" [routerLink]="'/create-listing'" class="flex align-items-center text-decoration-none mr-3">
-            <i class="pi pi-plus text-2xl mr-2"></i> Create Listing
+        <!-- Create Listing Link (Visible only when logged in) -->
+        <a *ngIf="isLoggedIn" [routerLink]="'/create-listing'" class="flex align-items-center text-decoration-none mr-4 p-menuitem-link">
+            <i class="pi pi-plus text-2xl mr-2"></i>
+            <span>Create Listing</span>
         </a>
 
-        <!-- Show "Sign Up" link only when the user is not logged in -->
-        <a *ngIf="!isLoggedIn" [routerLink]="'/register'" class="flex align-items-center text-decoration-none mr-3">
-            <i class="pi pi-user text-2xl mr-2"></i> Sign Up
+        <!-- Sign Up Link (Visible only when not logged in) -->
+        <a *ngIf="!isLoggedIn" [routerLink]="'/register'" class="flex align-items-center text-decoration-none mr-4 p-menuitem-link">
+            <i class="pi pi-user text-2xl mr-2"></i>
+            <span>Sign Up</span>
         </a>
 
-        <!-- Show "Logout" button only when the user is logged in -->
-        <button *ngIf="isLoggedIn" (click)="logout()" class="p-button p-component p-button-danger">
-            <i class="pi pi-sign-out mr-2"></i> Logout
+        <!-- Logout Button (Visible only when logged in) -->
+        <button *ngIf="isLoggedIn" (click)="logout()" class="p-button p-component p-button-outlined p-button-danger">
+            <i class="pi pi-sign-out text-2xl mr-2"></i>
+            <span>Logout</span>
         </button>
     </div>
 </header>
 
-<main class="p-3">
+<main class="p-3 mt-6">
     <router-outlet></router-outlet>
 </main>

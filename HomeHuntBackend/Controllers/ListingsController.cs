@@ -20,32 +20,44 @@ namespace HomeHuntBackend.Controllers
             _context = context;
         }
 
+
+
+
         // GET: api/Listings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
+        public async Task<ActionResult<IEnumerable<ViewListingDTO>>> GetListings()
         {
-            return await _context.Listings.ToListAsync();
-        }
+            var listings = await _context.Listings
+                .Include(l => l.User)
+                .Select(l => new ViewListingDTO
+                {
+                    ListingID = l.ListingId,
+                    UserID = l.UserId,
+                    Name = l.Name,
+                    Price = l.Price,
+                    City = l.City,
+                    HouseNumber = l.HouseNumber,
+                    RoadNumber = l.RoadNumber,
+                    BlockNumber = l.BlockNumber,
+                    Photo = l.Photo,
+                    Wifi = l.Wifi,
+                    WaterElectricity = l.WaterElectricity,
+                    Views = l.Views,
+                    CreatedAt = l.CreatedAt,
+                    UserFirstName = l.User != null ? l.User.FirstName : "Unknown",
+                    UserLastName = l.User != null ? l.User.LastName : "Unknown",
+                    UserEmail = l.User != null ? l.User.Email : "Unknown",
+                    UserPhoneNumber = l.User != null ? l.User.PhoneNumber : "Unknown"
+                })
+                .ToListAsync();
 
-        public class ListingDto
-        {
-            public int? UserId { get; set; }
-            public string Name { get; set; } = null!;
-            public decimal Price { get; set; }
-            public string City { get; set; } = null!;
-            public int HouseNumber { get; set; }
-            public int RoadNumber { get; set; }
-            public int BlockNumber { get; set; }
-            public IFormFile? Photo { get; set; }
-            public bool? Wifi { get; set; }
-            public bool? WaterElectricity { get; set; }
+            return Ok(listings);
         }
-
 
 
         // POST: api/Listings
         [HttpPost]
-        public async Task<ActionResult<Listing>> PostListing([FromForm] ListingDto listingDto)
+        public async Task<ActionResult<Listing>> PostListing([FromForm] CreateListingDTO listingDto)
         {
             // Convert DTO to entity
             var listing = new Listing

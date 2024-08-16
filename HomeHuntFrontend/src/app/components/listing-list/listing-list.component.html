@@ -1,18 +1,58 @@
-<div class="flex flex-wrap justify-content-center">
-  <div *ngFor="let listing of listings" class="p-2 w-full md:w-4">
-      <p-card class="surface-card p-4 shadow-2 border-round w-full">
-          <ng-template pTemplate="header">
-              <img alt="{{ listing.name }}" class="w-full mb-3 border-round">
-          </ng-template>
-          <ng-template pTemplate="content">
-              <h3 class="text-900 text-xl mb-3">{{ listing.name }}</h3>
-              <p class="mb-2"><strong>Price:</strong> {{ listing.price }} BD</p>
-              <p class="mb-2"><strong>Location:</strong> {{ listing.city }}, House: {{ listing.houseNumber }}, Road: {{ listing.roadNumber }}, Block: {{ listing.blockNumber }}</p>
-              <p class="mb-2"><strong>Wi-Fi:</strong> {{ listing.wifi ? 'Yes' : 'No' }}</p>
-              <p class="mb-2"><strong>Water & Electricity:</strong> {{ listing.waterElectricity ? 'Yes' : 'No' }}</p>
-              <p class="mb-4"><strong>Views:</strong> {{ listing.views }}</p>
-              <a class="text-purple-500 font-medium cursor-pointer">See More</a>
-          </ng-template>
+<!-- Filter Bar -->
+<div class="filter-bar p-3 shadow-2 surface-0 flex align-items-center justify-content-between mb-3">
+    <div class="p-field p-col-12 p-md-3">
+        <label for="priceRange">Price Range:</label>
+        <p-slider id="priceRange" [(ngModel)]="priceRange" [range]="true" [min]="0" [max]="10000" [style]="{width: '100%'}" (onChange)="onFilterChange()"></p-slider>
+        <div class="flex justify-content-between mt-2">
+            <span>{{priceRange[0]}} BD</span>
+            <span>{{priceRange[1]}} BD</span>
+        </div>
+    </div>
+
+    <div class="p-field p-col-12 p-md-2">
+        <label for="city">City:</label>
+        <p-dropdown id="city" [options]="cities" [(ngModel)]="selectedCity" placeholder="Select a City" (onChange)="onFilterChange()"></p-dropdown>
+    </div>
+
+    <div class="p-field p-col-12 p-md-2">
+        <p-checkbox [(ngModel)]="hasWifi" binary="true" label="Wi-Fi" (onChange)="onFilterChange()"></p-checkbox>
+    </div>
+
+    <div class="p-field p-col-12 p-md-2">
+        <p-checkbox [(ngModel)]="hasWaterElectricity" binary="true" label="Water & Electricity" (onChange)="onFilterChange()"></p-checkbox>
+    </div>
+
+    <div class="p-field p-col-12 p-md-2">
+        <label for="sortOrder">Sort By:</label>
+        <p-dropdown id="sortOrder" [options]="sortOptions" [(ngModel)]="selectedSortOrder" placeholder="Sort By" (onChange)="onFilterChange()"></p-dropdown>
+    </div>
+</div>
+
+<!-- Listings -->
+<div class="grid">
+    <div *ngFor="let listing of filteredListings" class="col-12 sm:col-6 lg:col-4 p-2">
+      <p-card class="surface-card shadow-2 border-round" styleClass="listing-card">
+        <ng-template pTemplate="header">
+          <div class="image-container">
+            <img
+              [src]="listing.photo ? 'data:image/jpeg;base64,' + listing.photo : 'default-image-url.jpg'"
+              alt="{{ listing.name }}"
+              class="w-full h-full object-fit-cover border-round-top"
+            />
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <div class="flex justify-content-between align-items-center mb-3">
+            <h3 class="text-900 text-xl">{{ listing.name }}</h3>
+            <span class="text-primary font-bold text-lg">{{ listing.price }} BD</span>
+          </div>
+          <p class="mb-2"><i class="pi pi-map-marker mr-2 text-primary"></i>{{ listing.city }}, House {{ listing.houseNumber }}, Road {{ listing.roadNumber }}, Block {{ listing.blockNumber }}</p>
+          <p class="mb-2"><i class="pi pi-wifi mr-2 text-primary"></i>Wi-Fi: {{ listing.wifi ? 'Yes' : 'No' }}</p>
+          <p class="mb-2"><i class="pi pi-sliders-h mr-2 text-primary"></i>Water & Electricity: {{ listing.waterElectricity ? 'Yes' : 'No' }}</p>
+          <p class="mb-2"><i class="pi pi-user mr-2 text-primary"></i>Listed By: {{ listing.userFirstName }} {{ listing.userLastName }}</p>
+          <p class="mb-2"><i class="pi pi-envelope mr-2 text-primary"></i>Contact: {{ listing.userEmail }}, {{ listing.userPhoneNumber }}</p>
+          <p class="mb-2"><i class="pi pi-calendar mr-2 text-primary"></i>Date Listed: {{ listing.createdAt | date:'medium' }}</p>
+        </ng-template>
       </p-card>
-  </div>
+    </div>
 </div>
