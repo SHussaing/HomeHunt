@@ -40,6 +40,9 @@ export class CreateListingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+    }
     
     this.listingForm = this.fb.group({
       name: ['', Validators.required],

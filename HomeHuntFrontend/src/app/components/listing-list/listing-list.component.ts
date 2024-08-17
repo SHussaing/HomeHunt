@@ -2,34 +2,37 @@ import { Component, OnInit } from '@angular/core';
 import { ListingService } from '../../services/listing.service';
 import { Listing } from '../../models/listing.model';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common'; // Add CommonModule if needed for directives like ngFor, ngIf, etc.
+import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
-import { FormsModule } from '@angular/forms'; // Import FormsModule for two-way data binding
-import { SliderModule } from 'primeng/slider'; // PrimeNG Slider module
-import { DropdownModule } from 'primeng/dropdown'; // PrimeNG Dropdown module
-import { CheckboxModule } from 'primeng/checkbox'; // PrimeNG Checkbox module
+import { FormsModule } from '@angular/forms';
+import { SliderModule } from 'primeng/slider';
+import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ProgressSpinnerModule } from 'primeng/progressspinner'; // Import ProgressSpinnerModule
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-listing-list',
   standalone: true,
   imports: [
-    HttpClientModule,  // Correctly import HttpClientModule
-    CommonModule,       // Import CommonModule if using Angular directives like *ngFor or *ngIf
-    CardModule,         // Import CardModule for the PrimeNG card component
-    FormsModule,        // Import FormsModule for two-way data binding with ngModel
-    SliderModule,       // Import SliderModule for the PrimeNG slider component
-    DropdownModule,     // Import DropdownModule for the PrimeNG dropdown component
-    CheckboxModule      // Import CheckboxModule for the PrimeNG checkbox component
+    HttpClientModule,
+    CommonModule,
+    CardModule,
+    FormsModule,
+    SliderModule,
+    DropdownModule,
+    CheckboxModule,
+    ProgressSpinnerModule // Add ProgressSpinnerModule to imports
   ],
-  providers: [ListingService],  // Ensure the service is provided
+  providers: [ListingService],
   templateUrl: './listing-list.component.html',
   styleUrls: ['./listing-list.component.scss']
 })
 export class ListingListComponent implements OnInit {
   listings: Listing[] = [];
   filteredListings: Listing[] = [];
-  
+  loading: boolean = true; // Add a loading property
+
   // Filter Properties
   priceRange: number[] = [0, 10000];
   selectedCity: string = '';
@@ -50,9 +53,16 @@ export class ListingListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.listingService.getListings().subscribe(data => {
-      this.listings = data;
-      this.applyFilters(); // Apply initial filters
+    this.listingService.getListings().subscribe({
+      next: (data) => {
+        this.listings = data;
+        this.applyFilters(); // Apply initial filters
+        this.loading = false; // Stop loading when data is received
+      },
+      error: (err) => {
+        console.error('Error fetching listings:', err);
+        this.loading = false; // Stop loading even if there's an error
+      }
     });
 
     this.loadCities();
@@ -85,8 +95,16 @@ export class ListingListComponent implements OnInit {
       });
   }
 
-  // Method to handle changes in filters
   onFilterChange(): void {
+    this.applyFilters();
+  }
+
+  resetFilters(): void {
+    this.priceRange = [0, 10000];
+    this.selectedCity = '';
+    this.hasWifi = false;
+    this.hasWaterElectricity = false;
+    this.selectedSortOrder = 'latest';
     this.applyFilters();
   }
 }

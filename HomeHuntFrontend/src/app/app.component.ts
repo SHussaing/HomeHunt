@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { ListingListComponent } from './components/listing-list/listing-list.component';
 import { AuthService } from './services/auth.service'; 
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core'; 
 
@@ -27,6 +27,16 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // Check if the user is logged in
     this.isLoggedIn = this.authService.isLoggedIn();
+
+    // Listen to router events
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // Check if the navigation is to the root path
+        if (event.url === '/') {
+          this.isLoggedIn = this.authService.isLoggedIn();
+        }
+      }
+    });
   }
 
   logout(): void {
