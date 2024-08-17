@@ -19,11 +19,19 @@
             <span>Sign Up</span>
         </a>
 
-        <!-- Logout Button (Visible only when logged in) -->
-        <button *ngIf="isLoggedIn" (click)="logout()" class="p-button p-component p-button-outlined p-button-danger">
-            <i class="pi pi-sign-out text-2xl mr-2"></i>
-            <span>Logout</span>
-        </button>
+        <!-- User Name and Logout (Visible only when logged in) -->
+        <div *ngIf="isLoggedIn" class="relative">
+            <span class="cursor-pointer flex align-items-center" (click)="toggleLogout()">
+                <i class="pi pi-user text-2xl mr-2"></i>
+                <span>{{ userFullName }}</span>
+            </span>
+
+            <!-- Logout Button -->
+            <button *ngIf="showLogout" (click)="logout()" class="absolute right-0 mt-2 p-button p-component p-button-outlined p-button-danger">
+                <i class="pi pi-sign-out text-2xl mr-2"></i>
+                <span>Logout</span>
+            </button>
+        </div>
     </div>
 </header>
 

@@ -17,6 +17,8 @@ import { ChangeDetectorRef } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'HomeHuntFrontend';
   isLoggedIn: boolean = false;
+  userFullName: string = ''; 
+  showLogout: boolean = false; // To control the visibility of the logout button
 
   constructor(
     private authService: AuthService,
@@ -25,24 +27,37 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Check if the user is logged in
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.checkLoginStatus();
 
     // Listen to router events
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        // Check if the navigation is to the root path
         if (event.url === '/') {
-          this.isLoggedIn = this.authService.isLoggedIn();
+          this.checkLoginStatus();
         }
       }
     });
   }
 
+  checkLoginStatus(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      const userDetails = this.authService.getUserDetails();
+      if (userDetails) {
+        this.userFullName = `${userDetails.firstName} ${userDetails.lastName}`;
+      }
+    }
+  }
+
+  toggleLogout(): void {
+    this.showLogout = !this.showLogout;
+  }
+
   logout(): void {
     this.authService.logout();
     this.isLoggedIn = false;
-    this.cdr.detectChanges(); 
-    this.router.navigate(['/']); 
+    this.showLogout = false;
+    this.cdr.detectChanges();
+    this.router.navigate(['/']);
   }
 }
